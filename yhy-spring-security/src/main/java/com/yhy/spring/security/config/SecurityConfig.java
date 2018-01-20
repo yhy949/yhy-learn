@@ -9,6 +9,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import javax.sql.DataSource;
+
 /**
  * spring security 配置
  * @author yhy
@@ -32,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
             .antMatchers("/", "/home","/int","/getUser").permitAll()
             .anyRequest().authenticated()
                 //登陆后之后拥有“ADMIN”权限才可以访问/hello方法，否则系统会出现“403”权限不足的提示
-            .mvcMatchers("/hello").hasAuthority("ADMIN")
+            .mvcMatchers("/hello").hasAuthority("sss")
             .and()
             .formLogin()
                 //指定登录页

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace命名空间，为了对sql语句进行隔离，方便管理 ，mapper开发dao方式，使用namespace有特殊作用 -->
+<mapper namespace="com.yhy.mybatis.dao.BlogDao">
+    <!-- 在mapper.xml文件中配置很多的sql语句，执行每个sql语句时，封装为MappedStatement对象
+    mapper.xml以statement为单位管理sql语句-->
+    <!-- 根据id查询用户信息 -->
+    <!--
+        id：唯一标识 一个statement
+        #{}：表示 一个占位符，如果#{}中传入简单类型的参数，#{}中的名称随意
+        parameterType：输入 参数的类型，通过#{}接收parameterType输入 的参数
+        resultType：输出结果 类型，不管返回是多条还是单条，指定单条记录映射的pojo类型
+     -->
+
+    <resultMap id="defaultResultMap" type="com.yhy.mybatis.domain.Blog">
+        <id property="id" column="id"/>
+        <result property="name" column="blog_name"/>
+        <association property="author" javaType="Author">
+            <id property="id" column="author_id" />
+            <result property="name" column="author_name"/>
+        </association>
+        <collection property="tar" ofType="Tar">
+            <id property="id" column="tar_id" />
+            <result property="name" column="tar_name"/>
+        </collection>
+    </resultMap>
+    <select id="findById" parameterType="int" resultMap="defaultResultMap">
+        SELECT
+            b.blog_id AS id,
+            b.blog_name AS name,
+            a.author_id,
+            a.author_name,
+            t.tar_id,
+            t.tar_name
+        from blog b
+            LEFT OUTER JOIN author a ON b.blog_id = a.blog_id
+            LEFT OUTER JOIN tar t ON b.blog_id = t.blog_id
+        where b.blog_id=#{id}
+    </select>
+</mapper>

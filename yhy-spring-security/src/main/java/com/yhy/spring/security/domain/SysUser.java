@@ -1,5 +1,7 @@
 package com.yhy.spring.security.domain;
 
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
@@ -11,7 +13,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name="s_user")
-public class SysUser {
+public class SysUser{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
@@ -26,7 +28,7 @@ public class SysUser {
     @Column(name = "dob", length = 10)
     private Date dob;//时间
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "SUser")
+    @ManyToMany(cascade = {CascadeType.REFRESH},fetch = FetchType.EAGER)
     private Set<SysRole> SysRoles = new HashSet<SysRole>(0);// 所对应的角色集合
 
     public SysUser() {
